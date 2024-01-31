@@ -5,12 +5,14 @@
     --secondary-color: #6B8E23; /* Green Thorn */
     --font-color: #333; /* Dark Gray */
     --font-family: 'Playfair Display', serif;
+    --font-size: .9rem;
 }
 
 body {
     background-color: var(--main-color);
     color: var(--secondary-color);
     font-family: var(--font-family);
+    font-size: var(--font-size);
 }
 
 a, .btn-link {

@@ -33,28 +33,48 @@
     align-items: center;
 }
 
+.my-modal{
+    padding: 3rem;
+}
+
+.my-modal-content{
+    padding: 2rem;
+    border-radius: 15px;
+}
+
+.close-button {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 2rem;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .book-card {
     background-color: var(--main-color);
     color: var(--font-color);
     font-family: var(--font-family);
     display: flex;
-    padding: 15px;
-    width: 320px;
-    margin-bottom: 10px;
-    margin-left: 15px;
-    margin-right: 15px;
-    border-radius: 5px;
+    justify-content: center;
+    gap: 15px;
+    padding: 2rem;
+    width: 900px;
+    margin: auto;
     transition: .3s;
-}
-
-.book-card:hover {
+    border-radius: 20px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
+    
 }
 
 .book-image {
-    width: 100px;
-    height: auto;
+    width: 400px;
+    height: 600px;
     object-fit: cover;
     object-position: center;
     margin-right: 15px;
@@ -108,10 +128,16 @@
     cursor: default;
 }
 
-@media(max-width: 720px) {
-    .book-card {
-        width: 100%;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
+.book-year {
+    font-style: italic;
+    margin-left: 10px;
+}
+
+.book-description {
+    margin-top: 10px;
+}
+
+.book-link {
+    align-self: flex-end;
+    margin-top: auto;
 }

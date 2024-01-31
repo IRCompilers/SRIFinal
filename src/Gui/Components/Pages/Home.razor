@@ -1,35 +1,52 @@
 ﻿@page "/"
-@using Code.Models
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<div class="centered-input">
-    <input type="text" @bind-value="Query" class="styled-input" placeholder="Enter text here..."/>
-    <div class="search-button" type="submit" @onclick="PopulateBooks">🔍</div>
-</div>
 
-<div class="book-cards-container">
-    @foreach (var book in _books)
-    {
-        <div class="book-card">
-            <img class="book-image" src="@book.ImageUrl" alt="@book.Title">
-            <div class="book-details">
-                <h5 class="book-title">@book.Title</h5>
-                <p class="book-author">@book.Author</p>
-                <p class="book-rating">
-                    @($"{book.Rating:F1}") <img src="star.svg" alt="star" class="star-icon"/>
-                </p>
-                <div class="book-tags">
-                    @foreach (var tag in book.Tags)
-                    {
-                        <span class="tag-chip">@tag</span>
-                    }
+@if (!_isModalOpen)
+{
+    <div class="centered-input">
+        <input type="text" @bind-value="Query" class="styled-input" placeholder="Enter text here..."/>
+        <div class="search-button" type="submit" @onclick="PopulateBooks">🔍</div>
+    </div>
+
+    <div class="book-cards-container">
+        @foreach (var book in _books)
+        {
+            <Card Book="book" OnBookmarkClick="OpenModal"></Card>
+        }
+    </div>
+}
+
+@if (_isModalOpen)
+{
+    <div class="my-modal">
+        <div class="my-modal-content">
+            <div class="book-card">
+                <img class="book-image" src="@_selectedBook.ImageUrl" alt="@_selectedBook.Title">
+                <div class="book-details">
+                    <h2 class="book-title">@_selectedBook.Title</h2>
+                    <p class="book-author">
+                        @_selectedBook.Author <span class="book-year">@_selectedBook.Year</span>
+                    </p>
+                    <p class="book-rating">
+                        @($"{_selectedBook.Rating:F1}") <img src="star.svg" alt="star" class="star-icon"/>
+                    </p>
+                    <p class="book-description">@_selectedBook.Description</p>
+                    <div class="book-tags">
+                        @foreach (var tag in _selectedBook.Tags)
+                        {
+                            <span class="tag-chip">@tag</span>
+                        }
+                    </div>
+                    <a href="@_selectedBook.Url" class="book-link">Read More</a>
                 </div>
+                <span @onclick="CloseModal" class="close-button">&times;</span>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
 
 @code {
     private IEnumerable<BookCard> _books = [];
@@ -38,6 +55,20 @@
     private void PopulateBooks()
     {
         _books = Code.Query.GetRecommendations(Query);
+    }
+
+    private BookCard _selectedBook = null!;
+    private bool _isModalOpen = false;
+
+    private void OpenModal(BookCard book)
+    {
+        _selectedBook = book;
+        _isModalOpen = true;
+    }
+
+    private void CloseModal()
+    {
+        _isModalOpen = false;
     }
 
 }

@@ -1,0 +1,32 @@
+@using Code.Models
+@using System.Runtime.CompilerServices
+
+<div class="book-card">
+    <img class="book-image" src="@Book.ImageUrl" alt="@Book.Title">
+    <div class="book-details">
+        <h5 class="book-title">@Book.Title</h5>
+        <p class="book-author">@Book.Author</p>
+        <p class="book-rating">
+            @($"{Book.Rating:F1}") <img src="star.svg" alt="star" class="star-icon"/>
+        </p>
+        <div class="book-tags">
+            @foreach (var tag in Book.Tags)
+            {
+                <span class="tag-chip">@tag</span>
+            }
+        </div>
+        <img @onclick="BookmarkClick" class="bookmark-button" src="bookmark.png" alt="Bookmark">
+    </div>
+</div>
+
+@code {
+    [Parameter] public BookCard Book { get; set; } = null!;
+
+    [Parameter] public EventCallback<BookCard> OnBookmarkClick { get; set; }
+
+    private async Task BookmarkClick()
+    {
+        await OnBookmarkClick.InvokeAsync(Book);
+    }
+
+}

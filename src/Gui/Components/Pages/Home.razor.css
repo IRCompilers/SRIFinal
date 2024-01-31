@@ -1,0 +1,117 @@
+.centered-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main-color);
+    border-radius: 0 0 20px 20px;
+    padding: 10px;
+}
+
+.styled-input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    font-size: 1.7rem;
+    transition: 2s;
+}
+
+.book-cards-container {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.book-card {
+    background-color: var(--main-color);
+    color: var(--font-color);
+    font-family: var(--font-family);
+    display: flex;
+    padding: 15px;
+    width: 320px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 5px;
+    transition: .3s;
+}
+
+.book-card:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+.book-image {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    margin-right: 15px;
+    border-radius: 12px;
+}
+
+.book-card .book-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card .book-title {
+    font-weight: bold;
+}
+
+.book-card .book-author {
+    font-style: italic;
+    margin-bottom: .8rem;
+}
+
+.book-card .book-rating {
+    margin-bottom: 10px;
+}
+
+.book-card .book-tags {
+    margin-bottom: 10px;
+}
+
+.star-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.tag-chip {
+    display: inline-block;
+    padding: 0.4em 0.6em;
+    margin-right: 0.4em;
+    margin-bottom: 0.4em;
+    font-size: .8em;
+    line-height: 1;
+    color: var(--font-color);
+    background-color: #e8e8eb;
+    border-radius: 2em;
+    transition: .3s;
+}
+
+.tag-chip:hover{
+    background-color: var(--secondary-color);
+    color: var(--main-color);
+    cursor: default;
+}
+
+@media(max-width: 720px) {
+    .book-card {
+        width: 100%;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}

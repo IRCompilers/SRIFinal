@@ -1,5 +1,16 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+:root {
+    --main-color: #F5F5F5; /* Whitish */
+    --secondary-color: #6B8E23; /* Green Thorn */
+    --font-color: #333; /* Dark Gray */
+    --font-family: 'Playfair Display', serif;
+}
+
+body {
+    background-color: var(--main-color);
+    color: var(--secondary-color);
+    font-family: var(--font-family);
 }
 
 a, .btn-link {

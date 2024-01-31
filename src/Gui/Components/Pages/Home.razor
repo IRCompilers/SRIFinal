@@ -1,7 +1,43 @@
 ﻿@page "/"
+@using Code.Models
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="centered-input">
+    <input type="text" @bind-value="Query" class="styled-input" placeholder="Enter text here..."/>
+    <div class="search-button" type="submit" @onclick="PopulateBooks">🔍</div>
+</div>
 
-Welcome to your new app.
+<div class="book-cards-container">
+    @foreach (var book in _books)
+    {
+        <div class="book-card">
+            <img class="book-image" src="@book.ImageUrl" alt="@book.Title">
+            <div class="book-details">
+                <h5 class="book-title">@book.Title</h5>
+                <p class="book-author">@book.Author</p>
+                <p class="book-rating">
+                    @($"{book.Rating:F1}") <img src="star.svg" alt="star" class="star-icon"/>
+                </p>
+                <div class="book-tags">
+                    @foreach (var tag in book.Tags)
+                    {
+                        <span class="tag-chip">@tag</span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private IEnumerable<BookCard> _books = [];
+    private string Query { get; set; } = null!;
+
+    private void PopulateBooks()
+    {
+        _books = Code.Query.GetRecommendations(Query);
+    }
+
+}

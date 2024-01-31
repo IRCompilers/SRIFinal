@@ -1,7 +1,7 @@
 @using Code.Models
 @using System.Runtime.CompilerServices
 
-<div class="book-card">
+<div class="book-card" @onclick="BookmarkClick">
     <img class="book-image" src="@Book.ImageUrl" alt="@Book.Title">
     <div class="book-details">
         <h5 class="book-title">@Book.Title</h5>
@@ -15,7 +15,6 @@
                 <span class="tag-chip">@tag</span>
             }
         </div>
-        <img @onclick="BookmarkClick" class="bookmark-button" src="bookmark.png" alt="Bookmark">
     </div>
 </div>
 

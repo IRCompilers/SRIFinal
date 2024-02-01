@@ -1,7 +1,6 @@
 ﻿@page "/"
-@using Code
+@using Gui.Models
 @rendermode InteractiveServer
-@inject IRecommendationSystem RecommendationSystem
 
 <PageTitle>Home</PageTitle>
 
@@ -56,7 +55,7 @@
 
     private async Task PopulateBooks()
     {
-        _books = await RecommendationSystem.GetRecommendations(Query);
+        // _books = await RecommendationSystem.GetRecommendations(Query);
     }
 
     private BookCard _selectedBook = null!;

@@ -7,14 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Code\Code.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Shared\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Include="wwwroot\demo.jpeg" />
     </ItemGroup>
 

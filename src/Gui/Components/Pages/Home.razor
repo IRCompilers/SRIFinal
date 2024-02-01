@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using Code
 @rendermode InteractiveServer
+@inject IRecommendationSystem RecommendationSystem
 
 <PageTitle>Home</PageTitle>
 
@@ -52,9 +54,9 @@
     private IEnumerable<BookCard> _books = [];
     private string Query { get; set; } = null!;
 
-    private void PopulateBooks()
+    private async Task PopulateBooks()
     {
-        _books = Code.Query.GetRecommendations(Query);
+        _books = await RecommendationSystem.GetRecommendations(Query);
     }
 
     private BookCard _selectedBook = null!;

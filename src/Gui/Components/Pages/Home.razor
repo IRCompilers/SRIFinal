@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using Gui.Models
+@using Gui.Query
+@inject IQueryService QueryService
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -55,11 +57,11 @@
 
     private async Task PopulateBooks()
     {
-        // _books = await RecommendationSystem.GetRecommendations(Query);
+        _books = await QueryService.QueryAsync(Query);
     }
 
     private BookCard _selectedBook = null!;
-    private bool _isModalOpen = false;
+    private bool _isModalOpen;
 
     private void OpenModal(BookCard book)
     {

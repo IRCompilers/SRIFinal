@@ -1,10 +1,14 @@
 using Gui.Components;
+using Gui.Query;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IQueryService, QueryService>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
+
 @dataclass
 class BookCard:
     Title: str
@@ -9,6 +10,7 @@ class BookCard:
     Description: str
     ImageUrl: str
     Url: str
+    Rating: float
     Tags: List[str] = field(default_factory=list)
 
     def to_dict(self):
@@ -19,5 +21,6 @@ class BookCard:
             "Description": self.Description,
             "ImageUrl": self.ImageUrl,
             "Url": self.Url,
+            "Rating": self.Rating,
             "Tags": self.Tags
         }

@@ -7,6 +7,9 @@
 .env
 venv
 
+books.json
+dictionary.pkl
+
 # User-specific files
 *.rsuser
 *.suo

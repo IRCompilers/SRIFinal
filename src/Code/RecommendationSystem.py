@@ -14,8 +14,8 @@ def AddBooks(books: List[BookEntry]):
     texts = [book.Text for book in books]
     preprocessed_documents = Preprocess(texts)
     vectorized_documents, dictionary = Vectorize(preprocessed_documents)
-    SaveBooksToJson(books, vectorized_documents, 'books.json')
-    dictionary.save('dictionary.pkl')
+    SaveBooksToJson(books, vectorized_documents, '../../books.json')
+    dictionary.save('../../dictionary.pkl')
 
 
 def Query(query: str) -> List[BookCard]:
@@ -25,54 +25,27 @@ def Query(query: str) -> List[BookCard]:
     # Load the dictionary
     dictionary = corpora.Dictionary.load('dictionary.pkl')
 
-    # for id, token in dictionary.items():
-    #     print(f"ID: {id}, Token: {token}")
-
     # Preprocess the query string
     preprocessed_query = Preprocess([query])
-
-    print("Preprocessed query: ", preprocessed_query)
-    for word in preprocessed_query[0]:
-        if word in dictionary.token2id:
-            print(f"'{word}' is in the dictionary with id {dictionary.token2id[word]}")
-        else:
-            print(f"'{word}' is not in the dictionary")
-
     # Vectorize the preprocessed query
-    query_vector, _ = Vectorize(preprocessed_query, dictionary)
-
-    for v in query_vector:
-        print(v)
+    query_vector, _ = Vectorize(preprocessed_query, dictionary, True)
 
     # Calculate the similarity between the query vector and each book vector
     index = similarities.MatrixSimilarity([bucket.Vector for bucket in book_buckets])
-
-    # print("Query vector", list(query_vector))
-
     sims = index[query_vector]
 
-    for i in range(len(sims)):
-        print(f"Book {i} has similarity score {sims[i]}")
-
-    # Sort the books by their similarity scores
-    sorted_book_buckets = sorted(zip(book_buckets, sims), key=lambda item: -item[1])
-
-    # Convert the sorted book buckets into BookCard objects
     book_cards = [BookCard(
-        Title=bucket.Title,
-        Author=bucket.Author,
-        Year=bucket.Year,
-        Description="",
-        ImageUrl=bucket.ImageUrl,
-        Rating=sim,
-        Url=bucket.Url,
+        Title=book_buckets[i].Title,
+        Author=book_buckets[i].Author,
+        Year=book_buckets[i].Year,
+        Description=book_buckets[i].Description,
+        ImageUrl=book_buckets[i].ImageUrl,
+        Rating=sim * 5.0,
+        Url=book_buckets[i].Url,
         Tags=[]
-    ) for bucket, sim in sorted_book_buckets]
+    ) for i, sim in enumerate(sims[0]) if sim > 0.0]
+
+    # Sort the book cards by rating in descending order
+    book_cards = sorted(book_cards, key=lambda x: x.Rating, reverse=True)
 
     return book_cards
-
-
-# books = CreateSampleBooks()
-# AddBooks(books)
-results = Query("Great grapes in this novel")
-# print(results)

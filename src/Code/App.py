@@ -4,25 +4,45 @@ from src.Code.Recommendation.RecommendationSystem import BookRecommendationSyste
 from src.Code.Recommendation.Sampler import CreateSampleBooks
 
 app = FastAPI()
-
-# Create an instance of BookRecommendationSystem
 book_rec_system = BookRecommendationSystem()
 
 
 @app.get("/query")
 def query_books(query: str):
-    # Use the instance method Query of book_rec_system
+    """
+    Query books based on the provided query string.
+
+    Args:
+        query (str): The query string to search for in the books.
+
+    Returns:
+        list: A list of books that match the query string.
+    """
     return book_rec_system.Query(query)
 
 
 @app.get("/autocomplete")
 def auto_complete(query: str):
-    # Use the instance method AutoComplete of book_rec_system
+    """
+    Autocomplete the query based on the provided query string.
+
+    Args:
+        query (str): The query string to autocomplete.
+
+    Returns:
+        list: A list of possible completions for the query string.
+    """
     return book_rec_system.AutoComplete(query)
 
 
 @app.get("/sample")
 def sample():
+    """
+    Create sample books and load them into the recommendation system.
+
+    Returns:
+        None
+    """
     books = CreateSampleBooks()
     book_rec_system.AddBooks(books)
     book_rec_system.LoadResources()

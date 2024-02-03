@@ -6,6 +6,15 @@ from src.Code.Models.BookBucket import BookBucket
 
 
 def SaveBooksToJson(books: List[BookEntry], vectorized_documents, tags, filename: str):
+    """
+    Save the given books, vectorized documents, and tags to a JSON file.
+
+    Args:
+        books (List[BookEntry]): The list of books to save.
+        vectorized_documents (list): The list of vectorized documents to save.
+        tags (list): The list of tags to save.
+        filename (str): The name of the file to save to.
+    """
     book_buckets = []
     for book, vector, tags in zip(books, vectorized_documents, tags):
         book_bucket = BookBucket(
@@ -25,6 +34,15 @@ def SaveBooksToJson(books: List[BookEntry], vectorized_documents, tags, filename
 
 
 def LoadBooksFromJson(filename: str) -> List[BookBucket]:
+    """
+    Load book buckets from a JSON file.
+
+    Args:
+        filename (str): The name of the file to load from.
+
+    Returns:
+        List[BookBucket]: A list of book buckets loaded from the file.
+    """
     with open(filename, 'r') as f:
         data = json.load(f)
 
@@ -46,11 +64,28 @@ def LoadBooksFromJson(filename: str) -> List[BookBucket]:
 
 
 def SaveTrieToJson(trie, filename: str):
+    """
+    Save the given MCS Trie to a JSON file.
+
+    Args:
+        trie (Trie): The trie to save.
+        filename (str): The name of the file to save to.
+    """
     with open(filename, 'w') as f:
         json.dump(trie.to_dict(), f)
 
 
 def LoadTrieFromJson(trie, filename: str):
+    """
+    Load an MCS Trie from a JSON file.
+
+    Args:
+        trie (Trie): The trie to load into.
+        filename (str): The name of the file to load from.
+
+    Returns:
+        Trie: The loaded trie.
+    """
     with open(filename, 'r') as f:
         data = json.load(f)
 

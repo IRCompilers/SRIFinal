@@ -1,3 +1,5 @@
+from typing import List
+
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
@@ -7,7 +9,18 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from src.Code.Recommendation.Sampler import get_hardcoded_book_descriptions, get_hardcoded_book_tags
 
 
-def TrainModel(descriptions, tags):
+def TrainModel(descriptions: List[str], tags: List[List[str]]):
+    """
+    Trains a OneVsRestClassifier model with SGDClassifier as the base estimator.
+
+    Args:
+        descriptions (list): A list of book descriptions.
+        tags (list): A list of lists of book tags.
+
+    Returns:
+        tuple: A tuple containing the trained classifier, the TF-IDF vectorizer, and the MultiLabelBinarizer.
+    """
+
     # Convert the tags to a binary matrix
     mlb = MultiLabelBinarizer()
     binary_tags = mlb.fit_transform(tags)
@@ -28,7 +41,16 @@ def TrainModel(descriptions, tags):
     return classifier, vectorizer, mlb
 
 
-def PredictTags(description_words):
+def PredictTags(description_words: List[str]) -> List[str]:
+    """
+    Predicts the tags for a given book description.
+
+    Args:
+        description_words (list): A list of words in the book description.
+
+    Returns:
+        list: A list of predicted tags for the book.
+    """
     # Load the trained model, vectorizer, and mlb from disk
     classifier = joblib.load('Resources/classifier.joblib')
     vectorizer = joblib.load('Resources/vectorizer.joblib')

@@ -4,12 +4,27 @@ from src.Code.Recommendation.RecommendationSystem import BookRecommendationSyste
 
 
 def query_function(query_system, query):
+    """
+    Executes a query on the provided query system.
+
+    Args:
+        query_system (BookRecommendationSystem): The book recommendation system to query.
+        query (str): The query string to search for in the books.
+
+    Returns:
+        list: A list of books that match the query string.
+    """
     return query_system.Query(query)
 
 
 def time_query(system, query):
+    """
+    Measures the time it takes to execute a query on a given system.
 
-
+    Args:
+        system (BookRecommendationSystem): The book recommendation system to query.
+        query (str): The query string to search for in the books.
+    """
     number_of_runs = 100  # Adjust as needed
     duration = timeit.timeit(lambda: query_function(system, query), number=number_of_runs)
 
@@ -18,6 +33,12 @@ def time_query(system, query):
 
 
 def benchmark_query(systems):
+    """
+    Benchmarks the query function on multiple systems.
+
+    Args:
+        systems (list): A list of book recommendation systems to benchmark.
+    """
     query = "The Great Grapes that went over the wall that one time"
 
     for i in range(len(systems)):
@@ -27,5 +48,8 @@ def benchmark_query(systems):
 
 
 if __name__ == "__main__":
+    """
+    Main entry point of the script. Initializes the systems to test and benchmarks the query function on them.
+    """
     systemsToTest = [BookRecommendationSystem()]
     benchmark_query(systemsToTest)

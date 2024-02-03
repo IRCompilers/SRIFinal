@@ -9,13 +9,13 @@
 
 @if (!_isModalOpen)
 {
-    <div class="centered-input">
+    <div class="centered-input mb-4">
         <input type="text" class="autocomplete-input" value="@AutoComplete" readonly/>
         <input type="text" @bind-value="Query" @oninput="UpdateAutoComplete" class="user-input" placeholder="Enter text here..."/>
         <button class="search" @onclick="@PopulateBooks">Search</button>
     </div>
 
-    <div class="book-cards-container">
+    <div class="book-cards-container mt-5">
         @foreach (var book in _books)
         {
             <Card Book="book" OnBookmarkClick="OpenModal"></Card>

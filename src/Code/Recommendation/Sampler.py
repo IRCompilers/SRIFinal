@@ -10,7 +10,7 @@ def CreateSampleBooks() -> List[BookEntry]:
             Year=1925,
             Description="The Great Gatsby is a novel by American author F. Scott Fitzgerald. The story takes place in 1922, during the Roaring Twenties, a time of prosperity in the United States after World War I. The book received critical acclaim and is generally considered Fitzgerald's best work. It is also widely regarded as a Great American Novel and a literary classic, capturing the essence of an era.",
             Text="The Great Gatsby is a novel by American author F. Scott Fitzgerald. The story takes place in 1922, during the Roaring Twenties, a time of prosperity in the United States after World War I. The book received critical acclaim and is generally considered Fitzgerald's best work. It is also widely regarded as a Great American Novel and a literary classic, capturing the essence of an era.",
-            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/f/f7/TheGreatGatsby_1925jacket.jpeg",
+            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg",
             Url="https://en.wikipedia.org/wiki/The_Great_Gatsby"
         ),
         BookEntry.BookEntry(
@@ -28,7 +28,7 @@ def CreateSampleBooks() -> List[BookEntry]:
             Year=1949,
             Description="1984 is a dystopian social science fiction novel by English novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime. Thematically, 1984 centres on the consequences of totalitarianism, mass surveillance, and repressive regimentation of persons and behaviours within society.",
             Text="1984 is a dystopian social science fiction novel by English novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime. Thematically, 1984 centres on the consequences of totalitarianism, mass surveillance, and repressive regimentation of persons and behaviours within society.",
-            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/c/c3/1984first.jpg",
+            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg",
             Url="https://en.wikipedia.org/wiki/Nineteen_Eighty-Four"
         ),
         BookEntry.BookEntry(
@@ -37,7 +37,7 @@ def CreateSampleBooks() -> List[BookEntry]:
             Year=1951,
             Description="The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adults, but is often read by adolescents for its themes of angst and alienation, and as a critique on superficiality in society.",
             Text="The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adults, but is often read by adolescents for its themes of angst and alienation, and as a critique on superficiality in society.",
-            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/3/32/Rye_catcher.jpg",
+            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg",
             Url="https://en.wikipedia.org/wiki/The_Catcher_in_the_Rye"
         ),
         BookEntry.BookEntry(
@@ -46,7 +46,7 @@ def CreateSampleBooks() -> List[BookEntry]:
             Year=1939,
             Description="The Grapes of Wrath is an American realist novel written by John Steinbeck and published in 1939. The book won the National Book Award and Pulitzer Prize for fiction, and it was cited prominently when Steinbeck was awarded the Nobel Prize in 1962.",
             Text="The Grapes of Wrath is an American realist novel written by John Steinbeck and published in 1939. The book won the National Book Award and Pulitzer Prize for fiction, and it was cited prominently when Steinbeck was awarded the Nobel Prize in 1962.",
-            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/7/7e/SteinbeckGrapesOfWrath.jpg",
+            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg",
             Url="https://en.wikipedia.org/wiki/The_Grapes_of_Wrath"
         ),
         BookEntry.BookEntry(
@@ -55,7 +55,7 @@ def CreateSampleBooks() -> List[BookEntry]:
             Year=1926,
             Description="The Sun Also Rises is a 1926 novel by American writer Ernest Hemingway that portrays American and British expatriates who travel from Paris to the Festival of San Fermín in Pamplona to watch the running of the bulls and the bullfights.",
             Text="The Sun Also Rises is a 1926 novel by American writer Ernest Hemingway that portrays American and British expatriates who travel from Paris to the Festival of San Fermín in Pamplona to watch the running of the bulls and the bullfights.",
-            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/0/0d/TheSunAlsoRises.jpg",
+            ImageUrl="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg",
             Url="https://en.wikipedia.org/wiki/The_Sun_Also_Rises"
         ),
     ]

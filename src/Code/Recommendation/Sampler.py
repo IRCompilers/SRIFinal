@@ -1,5 +1,5 @@
 from typing import List
-from src.Code import BookEntry
+from src.Code.Models import BookEntry
 
 
 def CreateSampleBooks() -> List[BookEntry]:

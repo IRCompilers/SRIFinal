@@ -1,8 +1,8 @@
 import json
 from typing import List
 
-from src.Code import BookEntry
-from src.Code.BookBucket import BookBucket
+from src.Code.Models import BookEntry
+from src.Code.Models.BookBucket import BookBucket
 
 
 def SaveBooksToJson(books: List[BookEntry], vectorized_documents, filename: str):

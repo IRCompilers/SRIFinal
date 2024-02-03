@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from src.Code.RecommendationSystem import Query
+from src.Code.Recommendation.RecommendationSystem import BookRecommendationSystem
 
 app = FastAPI()
 
 
 @app.get("/query")
 def query_books(query: str):
-    return Query(query)
+    return BookRecommendationSystem.Query(query)

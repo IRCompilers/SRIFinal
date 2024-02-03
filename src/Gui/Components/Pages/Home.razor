@@ -10,8 +10,9 @@
 @if (!_isModalOpen)
 {
     <div class="centered-input">
-        <input type="text" @bind-value="Query" class="styled-input" placeholder="Enter text here..."/>
-        <div class="search-button" type="submit" @onclick="PopulateBooks">🔍</div>
+        <input type="text" class="autocomplete-input" value="@AutoComplete" readonly/>
+        <input type="text" @bind-value="Query" @oninput="UpdateAutoComplete" class="user-input" placeholder="Enter text here..."/>
+        <button class="search" @onclick="@PopulateBooks">Search</button>
     </div>
 
     <div class="book-cards-container">
@@ -54,10 +55,12 @@
 @code {
     private IEnumerable<BookCard> _books = [];
     private string Query { get; set; } = null!;
+    private string AutoComplete { get; set; } = null!;
 
     private async Task PopulateBooks()
     {
         _books = await QueryService.QueryAsync(Query);
+        Console.WriteLine(_books.Count());
     }
 
     private BookCard _selectedBook = null!;
@@ -72,6 +75,12 @@
     private void CloseModal()
     {
         _isModalOpen = false;
+    }
+
+    private void UpdateAutoComplete(ChangeEventArgs e)
+    {
+        var input = e?.Value?.ToString();
+        AutoComplete = input + "autocomplete";
     }
 
 }

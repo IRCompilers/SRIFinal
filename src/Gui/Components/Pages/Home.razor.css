@@ -1,10 +1,7 @@
 .centered-input {
     display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: var(--main-color);
     border-radius: 0 0 20px 20px;
-    padding: 10px;
 }
 
 .styled-input {
@@ -14,16 +11,6 @@
     border: 1px solid #ccc;
 }
 
-.search-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: none;
-    font-size: 1.7rem;
-    transition: 2s;
-}
 
 .book-cards-container {
     margin-top: 1.5rem;
@@ -182,4 +169,49 @@
         top: 15%;
         right: 15%;
     }
+
+    
+    
+}
+
+@media(min-width: 450px){
+
+
+    .centered-input{
+        margin-left: 18%;
+    }
+}
+
+
+.centered-input {
+    position: relative;
+    justify-content: center;
+    left: 5%;
+}
+
+.user-input, .autocomplete-input, .search {
+    position: absolute;
+    top: 0;
+    left: 20%;
+    border: none;
+    padding: .3rem;
+    border-radius: 2px;
+}
+
+.search{
+    left: calc(20% + 175px);
+}
+
+.search-button{
+    
+}
+
+.user-input {
+    background: transparent;
+    z-index: 2;
+}
+
+.autocomplete-input {
+    color: #ccc;
+    z-index: 1;
 }

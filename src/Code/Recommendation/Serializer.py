@@ -41,3 +41,15 @@ def LoadBooksFromJson(filename: str) -> List[BookBucket]:
         book_buckets.append(book_bucket)
 
     return book_buckets
+
+
+def SaveTrieToJson(trie, filename: str):
+    with open(filename, 'w') as f:
+        json.dump(trie.to_dict(), f)
+
+
+def LoadTrieFromJson(trie, filename: str):
+    with open(filename, 'r') as f:
+        data = json.load(f)
+
+    return trie.from_dict(data)

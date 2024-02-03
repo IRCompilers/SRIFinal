@@ -14,4 +14,11 @@ public class QueryService(IHttpClientFactory httpClientFactory, IConfiguration c
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<BookCard[]>() ?? throw new InvalidOperationException("Response was not in the correct format.");
     }
+    
+    public async Task<string> AutoCompleteAsync(string query)
+    {
+        var response = await _httpClient.GetAsync($"{_baseAddress}/autocomplete?query={query}");
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
+    }
 }

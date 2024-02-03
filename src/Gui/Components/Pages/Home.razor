@@ -60,7 +60,6 @@
     private async Task PopulateBooks()
     {
         _books = await QueryService.QueryAsync(Query);
-        Console.WriteLine(_books.Count());
     }
 
     private BookCard _selectedBook = null!;
@@ -77,10 +76,11 @@
         _isModalOpen = false;
     }
 
-    private void UpdateAutoComplete(ChangeEventArgs e)
+    private async Task UpdateAutoComplete(ChangeEventArgs e)
     {
-        var input = e?.Value?.ToString();
-        AutoComplete = input + "autocomplete";
+        var input = e.Value?.ToString();
+        var result = string.IsNullOrWhiteSpace(input) ? "" : await QueryService.AutoCompleteAsync(input ?? "");
+        AutoComplete = input + result.Replace("\"", "");
     }
 
 }

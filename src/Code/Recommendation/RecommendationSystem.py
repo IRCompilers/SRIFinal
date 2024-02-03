@@ -1,6 +1,5 @@
 # Python imports
 from concurrent.futures import ThreadPoolExecutor
-from functools import lru_cache
 from typing import List
 
 # External imports
@@ -10,33 +9,50 @@ from gensim import similarities, corpora
 from src.Code.Models import BookEntry
 from src.Code.Models.BookCard import BookCard
 from src.Code.Recommendation.Preprocessor import Preprocess
-from src.Code.Recommendation.Serializer import SaveBooksToJson, LoadBooksFromJson
+from src.Code.Recommendation.Serializer import SaveBooksToJson, LoadBooksFromJson, SaveTrieToJson, LoadTrieFromJson
 from src.Code.Recommendation.Vectorizer import Vectorize
+from src.Code.Trie.Trie import Trie
+
+
+def flatten_list(list_of_lists):
+    return [item for sublist in list_of_lists for item in sublist]
 
 
 class BookRecommendationSystem:
     def __init__(self):
         self.dictionary = None
         self.book_buckets = None
+        self.autocomplete = Trie()
+        self.load_resources()
 
     @staticmethod
-    @lru_cache(maxsize=None)
     def AddBooks(books: List[BookEntry]):
         texts = [book.Text for book in books]
         preprocessed_documents = Preprocess(texts)
+        trie = Trie()
+
+        for word in flatten_list(preprocessed_documents):
+            trie.Insert(word)
+
+        SaveTrieToJson(trie, "Resources/autocomplete_trie.json")
+
         vectorized_documents, dictionary = Vectorize(preprocessed_documents)
-        SaveBooksToJson(books, vectorized_documents, '../../books.json')
-        dictionary.save('../../dictionary.pkl')
+        SaveBooksToJson(books, vectorized_documents, 'Resources/books.json')
+        dictionary.save('Resources/dictionary.pkl')
 
     def load_resources(self):
-        if self.book_buckets is None:
-            self.book_buckets = LoadBooksFromJson('books.json')
-        if self.dictionary is None:
-            self.dictionary = corpora.Dictionary.load('dictionary.pkl')
+        print("Loading resources")
+        try:
+            if self.book_buckets is None:
+                self.book_buckets = LoadBooksFromJson('Resources/books.json')
+            if self.dictionary is None:
+                self.dictionary = corpora.Dictionary.load('Resources/dictionary.pkl')
+            if len(self.autocomplete.root.children) == 0:
+                LoadTrieFromJson(self.autocomplete, 'Resources/autocomplete_trie.json')
+        except FileNotFoundError:
+            print("Error loading resources - Files where not found. Please add books to the system first.")
 
     def Query(self, query: str) -> List[BookCard]:
-        self.load_resources()
-
         preprocessed_query = Preprocess([query])
         query_vector, _ = Vectorize(preprocessed_query, self.dictionary, True)
 
@@ -66,3 +82,6 @@ class BookRecommendationSystem:
                 Tags=[]
             )
         return None
+
+    def AutoComplete(self, query):
+        return self.autocomplete.MostCommon(query)

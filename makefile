@@ -1,2 +1,2 @@
-dev:
-    dotnet watch run --project src/Gui
+run:
+    uvicorn src.Code.App:app --reload

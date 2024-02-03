@@ -4,7 +4,11 @@ from src.Code.Recommendation.RecommendationSystem import BookRecommendationSyste
 
 app = FastAPI()
 
+# Create an instance of BookRecommendationSystem
+book_rec_system = BookRecommendationSystem()
+
 
 @app.get("/query")
 def query_books(query: str):
-    return BookRecommendationSystem.Query(query)
+    # Use the instance method Query of book_rec_system
+    return book_rec_system.Query(query)

@@ -8,6 +8,8 @@ def query_function(query_system, query):
 
 
 def time_query(system, query):
+
+
     number_of_runs = 100  # Adjust as needed
     duration = timeit.timeit(lambda: query_function(system, query), number=number_of_runs)
 
@@ -16,7 +18,7 @@ def time_query(system, query):
 
 
 def benchmark_query(systems):
-    query = "The Great Grapes that went over the wall that one time"  # Replace with your query
+    query = "The Great Grapes that went over the wall that one time"
 
     for i in range(len(systems)):
         print(f"Benchmarking system {i}")
@@ -25,5 +27,5 @@ def benchmark_query(systems):
 
 
 if __name__ == "__main__":
-    systemsToTest = [BookRecommendationSystem]
+    systemsToTest = [BookRecommendationSystem()]
     benchmark_query(systemsToTest)

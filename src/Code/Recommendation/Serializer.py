@@ -5,15 +5,16 @@ from src.Code.Models import BookEntry
 from src.Code.Models.BookBucket import BookBucket
 
 
-def SaveBooksToJson(books: List[BookEntry], vectorized_documents, filename: str):
+def SaveBooksToJson(books: List[BookEntry], vectorized_documents, tags, filename: str):
     book_buckets = []
-    for book, vector in zip(books, vectorized_documents):
+    for book, vector, tags in zip(books, vectorized_documents, tags):
         book_bucket = BookBucket(
             Title=book.Title,
             Author=book.Author,
             Year=book.Year,
             Description=book.Description,
             ImageUrl=book.ImageUrl,
+            Tags=tags,
             Url=book.Url,
             Vector=vector
         )
@@ -36,6 +37,7 @@ def LoadBooksFromJson(filename: str) -> List[BookBucket]:
             Description=book_dict["Description"],
             ImageUrl=book_dict["ImageUrl"],
             Url=book_dict["Url"],
+            Tags=book_dict["Tags"],
             Vector=book_dict["Vector"]
         )
         book_buckets.append(book_bucket)

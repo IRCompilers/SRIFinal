@@ -16,7 +16,7 @@
                @ref="_inputElement"
                @bind-value="Query" 
                @oninput="UpdateAutoComplete" 
-               @onkeydown="HandleKeyDown" 
+               @onkeyup="HandleKeyDown" 
                class="user-input" 
                placeholder="Enter text here..."/>
         <button class="search" @onclick="@PopulateBooks">Search</button>

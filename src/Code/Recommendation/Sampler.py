@@ -1,4 +1,6 @@
+from random import randint
 from typing import List
+
 from src.Code.Models import BookEntry
 
 
@@ -61,3 +63,40 @@ def CreateSampleBooks() -> List[BookEntry]:
     ]
 
     return books
+
+
+def get_hardcoded_book_descriptions():
+    """Returns a list of 20 hardcoded book descriptions."""
+
+    book_descriptions = [
+        "A young wizard named Harry Potter discovers his magical heritage and begins his training at Hogwarts School of Witchcraft and Wizardry.",
+        "A dystopian novel about a totalitarian society where books are banned and independent thinking is suppressed.",
+        "A classic science fiction novel about a group of astronauts who travel through a wormhole to a distant galaxy.",
+        "A coming-of-age story about a young girl's life in the American South during the Great Depression.",
+        "A psychological thriller about a wealthy New York socialite who suspects her husband is trying to kill her.",
+        "A mystery novel about a detective who is hired to solve the crime surrounding a wealthy family's fortune.",
+        "A historical fiction novel about the lives of four sisters growing up in New England during the Civil War.",
+        "A fantasy novel about a young warrior exiled from his country willing to do anything to be accepted again. ",
+        "A science fiction novel about a group of astronauts who are stranded on a distant planet after their ship crashes.",
+        "A dystopian novel about a society where people are divided into factions based on their personalities.",
+    ]
+
+    return book_descriptions
+
+def get_hardcoded_book_tags():
+    """Returns a list of lists of hardcoded book tags."""
+
+    book_tags = [
+        ["fantasy", "magic", "wizardry", "school", "coming-of-age"],
+        ["dystopia", "censorship", "totalitarianism", "freedom", "rebellion"],
+        ["science fiction", "space travel", "aliens", "wormholes", "time travel"],
+        ["historical fiction", "Great Depression", "American South", "racism", "poverty"],
+        ["thriller", "mystery", "murder", "suspense", "psychological"],
+        ["mystery", "police", "suspense", "fiction"],
+        ["historical", "England", "Civil War", "family", "drama"],
+        ["fantasy", "swordsmanship", "freedom", "epic", "adolescents"],
+        ["science fiction", "space travel", "survival", "crash"],
+        ["dystopia", "factions", "segregation", "totalitarianism"]
+    ]
+
+    return book_tags

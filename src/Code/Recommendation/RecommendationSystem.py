@@ -10,6 +10,7 @@ from src.Code.Models import BookEntry
 from src.Code.Models.BookCard import BookCard
 from src.Code.Recommendation.Preprocessor import Preprocess
 from src.Code.Recommendation.Serializer import SaveBooksToJson, LoadBooksFromJson, SaveTrieToJson, LoadTrieFromJson
+from src.Code.Recommendation.Tagger import PredictTags
 from src.Code.Recommendation.Vectorizer import Vectorize
 from src.Code.Trie.Trie import Trie
 
@@ -23,7 +24,7 @@ class BookRecommendationSystem:
         self.dictionary = None
         self.book_buckets = None
         self.autocomplete = Trie()
-        self.load_resources()
+        self.LoadResources()
 
     @staticmethod
     def AddBooks(books: List[BookEntry]):
@@ -36,11 +37,24 @@ class BookRecommendationSystem:
 
         SaveTrieToJson(trie, "Resources/autocomplete_trie.json")
 
+        tags = BookRecommendationSystem.predict_tags_parallel(preprocessed_documents)
         vectorized_documents, dictionary = Vectorize(preprocessed_documents)
-        SaveBooksToJson(books, vectorized_documents, 'Resources/books.json')
+        SaveBooksToJson(books, vectorized_documents, tags, 'Resources/books.json')
         dictionary.save('Resources/dictionary.pkl')
 
-    def load_resources(self):
+    @staticmethod
+    def predict_tags_parallel(corpus_descriptions: List[List[str]]):
+        # Extract descriptions from books
+        descriptions = [description for description in corpus_descriptions]
+
+        # Create a ThreadPoolExecutor
+        with ThreadPoolExecutor() as executor:
+            # Use the executor to map the predict_tags function to the descriptions
+            predicted_tags = list(executor.map(PredictTags, descriptions))
+
+        return predicted_tags
+
+    def LoadResources(self):
         print("Loading resources")
         try:
             if self.book_buckets is None:

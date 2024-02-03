@@ -25,3 +25,4 @@ def auto_complete(query: str):
 def sample():
     books = CreateSampleBooks()
     book_rec_system.AddBooks(books)
+    book_rec_system.LoadResources()

@@ -112,13 +112,14 @@
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
+        switch (e.Key)
         {
-            await PopulateBooks();
-        }
-        else if (e.Key == "Tab")
-        {
-            Query = AutoComplete;
+            case "Enter":
+                await PopulateBooks();
+                break;
+            case "Tab":
+                Query = AutoComplete;
+                break;
         }
     }
 

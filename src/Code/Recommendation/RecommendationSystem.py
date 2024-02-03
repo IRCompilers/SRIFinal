@@ -82,6 +82,7 @@ class BookRecommendationSystem:
         SaveTrieToJson(trie, "Resources/autocomplete_trie.json")
 
         tags = BookRecommendationSystem.PredictTagsInParallel(preprocessed_documents)
+
         vectorized_documents, dictionary = Vectorize(preprocessed_documents)
         SaveBooksToJson(books, vectorized_documents, tags, 'Resources/books.json')
         dictionary.save('Resources/dictionary.pkl')
@@ -166,7 +167,7 @@ class BookRecommendationSystem:
                 ImageUrl=self.book_buckets[i].ImageUrl,
                 Rating=sim * 5.0,
                 Url=self.book_buckets[i].Url,
-                Tags=[]
+                Tags=self.book_buckets[i].Tags
             )
         return None
 

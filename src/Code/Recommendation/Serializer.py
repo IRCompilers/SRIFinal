@@ -23,7 +23,7 @@ def SaveBooksToJson(books: List[BookEntry], vectorized_documents, tags, filename
             Year=book.Year,
             Description=book.Description,
             ImageUrl=book.ImageUrl,
-            Tags=tags,
+            Tags=[tags[0]],
             Url=book.Url,
             Vector=vector
         )

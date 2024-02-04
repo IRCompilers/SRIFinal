@@ -1,0 +1,18 @@
+@using Gui.Events
+@inject IEventService eventService
+
+<h3>Query</h3>
+
+<div class="search-input">
+    <input type="text" @bind="query" placeholder="Enter query..." />
+    <button @onclick="Search">Search</button>
+</div>
+
+@code {
+    private string query { get; set; } = null!;
+
+    private void Search()
+    {
+        eventService.TriggerOnQuerySearch(query);
+    }
+}

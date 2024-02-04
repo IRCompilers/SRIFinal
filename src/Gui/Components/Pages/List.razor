@@ -1,0 +1,21 @@
+@using Gui.Events
+@inject IEventService EventService
+
+<h3>List</h3>
+
+@code {
+    protected override void OnInitialized()
+    {
+        EventService.OnQuerySearch += HandleQuerySearch;
+    }
+
+    private void HandleQuerySearch(string query)
+    {
+        Console.WriteLine("List: " + query);
+    }
+
+    public void Dispose()
+    {
+        EventService.OnQuerySearch -= HandleQuerySearch;
+    }
+}

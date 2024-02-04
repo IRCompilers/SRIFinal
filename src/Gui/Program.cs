@@ -1,4 +1,5 @@
 using Gui.Components;
+using Gui.Events;
 using Gui.Query;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IQueryService, QueryService>();
 
 var app = builder.Build();

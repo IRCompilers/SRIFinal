@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from src.Code.Recommendation.RecommendationSystem import BookRecommendationSystem
-from src.Code.Recommendation.Sampler import CreateSampleBooks
+from src.Code.Recommendation.Sampler import CreateSampleBooks, GetRandomBook
 
 app = FastAPI()
 book_rec_system = BookRecommendationSystem()
@@ -46,3 +46,9 @@ def sample():
     books = CreateSampleBooks()
     book_rec_system.AddBooks(books)
     book_rec_system.LoadResources()
+
+
+@app.get("/add-single")
+def addSingle():
+    book = GetRandomBook()
+    book_rec_system.AddBook(book)

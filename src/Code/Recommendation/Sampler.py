@@ -1,7 +1,18 @@
-from random import randint
 from typing import List
 
 from src.Code.Models import BookEntry
+
+
+def GetRandomBook() -> BookEntry:
+    return BookEntry.BookEntry(
+        Title="Dune",
+        Author="Frank Herbert",
+        Year=1965,
+        Description="Dune is a science fiction novel by American author Frank Herbert, originally published as two separate serials in Analog magazine. It tied with Roger Zelazny's This Immortal for the Hugo Award in 1966, and it won the inaugural Nebula Award for Best Novel.",
+        Text="Dune is a science fiction novel by American author Frank Herbert, originally published as two separate serials in Analog magazine. It tied with Roger Zelazny's This Immortal for the Hugo Award in 1966, and it won the inaugural Nebula Award for Best Novel.",
+        ImageUrl="https://upload.wikimedia.org/wikipedia/en/9/9b/Dune_Chard.jpg",
+        Url="https://en.wikipedia.org/wiki/Dune_(novel)"
+    )
 
 
 def CreateSampleBooks() -> List[BookEntry]:
@@ -82,6 +93,7 @@ def get_hardcoded_book_descriptions():
     ]
 
     return book_descriptions
+
 
 def get_hardcoded_book_tags():
     """Returns a list of lists of hardcoded book tags."""

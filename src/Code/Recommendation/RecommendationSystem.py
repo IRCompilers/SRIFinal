@@ -7,6 +7,7 @@ from gensim import similarities, corpora
 
 # Internal imports
 from src.Code.Models import BookEntry
+from src.Code.Models.BookBucket import BookBucket
 from src.Code.Models.BookCard import BookCard
 from src.Code.Recommendation.Preprocessor import Preprocess
 from src.Code.Recommendation.Serializer import SaveBooksToJson, LoadBooksFromJson, SaveTrieToJson, LoadTrieFromJson
@@ -17,47 +18,46 @@ from src.Code.Trie.Trie import Trie
 
 def flatten_list(list_of_lists):
     """
-        Flatten a list of lists into a single list.
+    Flatten a list of lists into a single list.
 
-        Args:
-            list_of_lists (list): The list of lists to flatten.
+    Args:
+        list_of_lists (list): The list of lists to flatten.
 
-        Returns:
-            list: A flattened list.
+    Returns:
+        list: A flattened list.
     """
     return [item for sublist in list_of_lists for item in sublist]
 
 
 class BookRecommendationSystem:
     """
-        A class used to represent a Book Recommendation System.
+    A class used to represent a Book Recommendation System.
 
-        ...
+    Attributes
+    ----------
+    dictionary : corpora.Dictionary
+        a dictionary that maps each word to its "id"
+    book_buckets : list
+        a list of book buckets
+    autocomplete : Trie
+        a Trie data structure for autocomplete functionality
 
-        Attributes
-        ----------
-        dictionary : corpora.Dictionary
-            a dictionary that maps each word to its "id"
-        book_buckets : list
-            a list of book buckets
-        autocomplete : Trie
-            a Trie data structure for autocomplete functionality
-
-        Methods
-        -------
-        AddBooks(books: List[BookEntry])
-            Adds books to the system.
-        PredictTagsInParallel(corpus_descriptions: List[List[str]]) -> List[List[str]]
-            Predicts tags for the given corpus descriptions in parallel.
-        LoadResources()
-            Loads resources from the file system.
-        Query(query: str) -> List[BookCard]
-            Queries the system with the given query string.
-        CreateBookCard(sim_tuple: (int, float)) -> BookCard | None
-            Creates a book card from the given similarity tuple.
-        AutoComplete(query: str) -> str
-            Returns the most common autocomplete suggestions for the given query string.
+    Methods
+    -------
+    AddBooks(books: List[BookEntry])
+        Adds books to the system.
+    PredictTagsInParallel(corpus_descriptions: List[List[str]]) -> List[List[str]]
+        Predicts tags for the given corpus descriptions in parallel.
+    LoadResources()
+        Loads resources from the file system.
+    Query(query: str) -> List[BookCard]
+        Queries the system with the given query string.
+    CreateBookCard(sim_tuple: (int, float)) -> BookCard | None
+        Creates a book card from the given similarity tuple.
+    AutoComplete(query: str) -> str
+        Returns the most common autocomplete suggestions for the given query string.
     """
+
     def __init__(self):
         self.dictionary = None
         self.book_buckets = None
@@ -86,6 +86,51 @@ class BookRecommendationSystem:
         vectorized_documents, dictionary = Vectorize(preprocessed_documents)
         SaveBooksToJson(books, vectorized_documents, tags, 'Resources/books.json')
         dictionary.save('Resources/dictionary.pkl')
+
+    def AddBook(self, book: BookEntry):
+        """
+        Adds a book to the system.
+
+        Args:
+            book (BookEntry): The book to add.
+        """
+        # Preprocess the book text
+
+        books_texts = [bucket.Text for bucket in self.book_buckets]
+        books_texts.append(book.Text)
+
+        preprocessed_text = Preprocess(books_texts)
+
+        # Insert each word of the preprocessed text into the autocomplete trie
+        for word in preprocessed_text[-1]:
+            self.autocomplete.Insert(word)
+
+        # Predict the tags for the book
+        tags = self.PredictTagsInParallel(preprocessed_text)
+
+        # Vectorize the preprocessed text
+        vectorized_text, _ = Vectorize(preprocessed_text, self.dictionary)
+
+        # Create a new BookBucket object with the book details, vectorized text, and predicted tags
+        book_bucket = BookBucket(
+            Title=book.Title,
+            Author=book.Author,
+            Year=book.Year,
+            Description=book.Description,
+            ImageUrl=book.ImageUrl,
+            Text=book.Text,
+            Tags=tags[-1],
+            Url=book.Url,
+            Vector=vectorized_text[-1]
+        )
+
+        self.book_buckets.append(book_bucket)
+
+        # Save the updated book_buckets list, dictionary, and autocomplete trie to the disk
+        SaveBooksToJson(self.book_buckets, [bucket.Vector for bucket in self.book_buckets],
+                        [bucket.Tags for bucket in self.book_buckets], 'Resources/books.json')
+        self.dictionary.save('Resources/dictionary.pkl')
+        SaveTrieToJson(self.autocomplete, 'Resources/autocomplete_trie.json')
 
     @staticmethod
     def PredictTagsInParallel(corpus_descriptions: List[List[str]]) -> List[List[str]]:

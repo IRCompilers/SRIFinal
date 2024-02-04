@@ -44,7 +44,7 @@ class Trie:
     def to_dict(self, node=None):
         if node is None:
             node = self.root
-        trie_dict = {node.char: {'mcs': node.mcs, 'children': {}}}
+        trie_dict = {node.char: {'mcs': node.mcs, 'mcs_count': node.mcs_count, 'children': {}}}
         for char, child_node in node.children.items():
             trie_dict[node.char]['children'].update(self.to_dict(child_node))
         return trie_dict
@@ -55,6 +55,7 @@ class Trie:
         for key, value in trie_dict.items():
             node.char = key
             node.mcs = value['mcs']
+            node.mcs_count = value['mcs_count']
             for child_key, child_value in value['children'].items():
                 node.children[child_key] = TrieNode()
                 self.from_dict({child_key: child_value}, node.children[child_key])

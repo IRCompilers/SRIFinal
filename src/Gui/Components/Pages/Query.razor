@@ -1,18 +1,46 @@
 @using Gui.Events
 @inject IEventService eventService
 
-<h3>Query</h3>
-
 <div class="search-input">
-    <input type="text" @bind="query" placeholder="Enter query..." />
-    <button @onclick="Search">Search</button>
+    <input type="text" @bind="query" @oninput="FetchAutoComplete" placeholder="@PickRandomPlaceholder()" />
+    <input type="text" value="@ghostQuery" class="ghost-input" readonly />
+    <button @onclick="Search"><i class="fas fa-search"></i></button>
 </div>
+
 
 @code {
     private string query { get; set; } = null!;
+    private string ghostQuery { get; set; } = null!;
 
     private void Search()
     {
         eventService.TriggerOnQuerySearch(query);
+    }
+    
+    private void FetchAutoComplete(ChangeEventArgs e)
+    {
+        var wholeInput = e.Value!.ToString()!;
+        var toAutocomplete = wholeInput.Split().Last();
+        
+        // if(string.IsNullOrWhiteSpace(toAutocomplete)) return;
+        
+        // var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteAsync(toAutocomplete ?? "");
+        // AutoComplete = wholeInput + result.Replace("\"", "");
+        ghostQuery = toAutocomplete  == "" ? "" : toAutocomplete + "auto";
+    }
+
+    private string PickRandomPlaceholder()
+    {
+        string[] placeholders =
+        [
+            "I like science fiction ...",
+            "Detective stories are my thing ...",
+            "I'm into fantasy ...",
+            "I'm a fan of horror ...",
+            "I'm a fan of romance ...",
+            "Historical fiction is the best ...",
+        ];
+        
+        return placeholders[new Random().Next(0, placeholders.Length)];
     }
 }

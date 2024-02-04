@@ -1,32 +1,54 @@
 @using Gui.Events
+@using Gui.Query
+@inject IQueryService QueryService
 @inject IEventService eventService
+@inject IJSRuntime JsRuntime
 
 <div class="search-input">
-    <input type="text" @bind="query" @oninput="FetchAutoComplete" placeholder="@PickRandomPlaceholder()" />
-    <input type="text" value="@ghostQuery" class="ghost-input" readonly />
+    <input @bind="query"
+           @oninput="FetchAutoComplete"
+           @onkeyup="HandleKeyDown"
+           placeholder="@PickRandomPlaceholder()"
+           @ref="_inputElement"
+           type="text"/>
+    <input class="ghost-input" readonly type="text" value="@ghostQuery" />
     <button @onclick="Search"><i class="fas fa-search"></i></button>
 </div>
 
+<script>
+    window.handleKeyDown = function (element) {
+        element.addEventListener('keydown', function (e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+            }
+        });
+    }
+</script>
 
 @code {
     private string query { get; set; } = null!;
     private string ghostQuery { get; set; } = null!;
+    private ElementReference _inputElement;
 
     private void Search()
     {
         eventService.TriggerOnQuerySearch(query);
     }
     
-    private void FetchAutoComplete(ChangeEventArgs e)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("handleKeyDown", _inputElement);
+        }
+    }
+    
+    private async Task FetchAutoComplete(ChangeEventArgs e)
     {
         var wholeInput = e.Value!.ToString()!;
         var toAutocomplete = wholeInput.Split().Last();
-        
-        // if(string.IsNullOrWhiteSpace(toAutocomplete)) return;
-        
-        // var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteAsync(toAutocomplete ?? "");
-        // AutoComplete = wholeInput + result.Replace("\"", "");
-        ghostQuery = toAutocomplete  == "" ? "" : toAutocomplete + "auto";
+        var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteAsync(toAutocomplete ?? "");
+        ghostQuery = wholeInput + result.Replace("\"", "");
     }
 
     private string PickRandomPlaceholder()
@@ -43,4 +65,18 @@
         
         return placeholders[new Random().Next(0, placeholders.Length)];
     }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Enter":
+                Search();
+                break;
+            case "Tab":
+                query = ghostQuery;
+                break;
+        }
+    }
+
 }

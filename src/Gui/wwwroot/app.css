@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 
 :root {
-    --main-color: #FDF5E6; /* Paper-like color */
+    --main-color: #fff6f5; /* Paper-like color */
     --secondary-color: #333; /* Dark Gray */
     --font-family: 'Playfair Display', serif;
     --font-size: .9rem;

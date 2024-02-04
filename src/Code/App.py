@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
+from src.Code.Models.BookEntry import BookEntry
 from src.Code.Recommendation.RecommendationSystem import BookRecommendationSystem
 from src.Code.Recommendation.Sampler import CreateSampleBooks, GetRandomBook
 
@@ -52,3 +53,21 @@ def sample():
 def addSingle():
     book = GetRandomBook()
     book_rec_system.AddBook(book)
+
+
+@app.post("/add-book")
+def add_book(book: BookEntry):
+    """
+    Add a new book to the recommendation system.
+
+    Args:
+        book (BookEntry): The book to add.
+
+    Returns:
+        dict: A message indicating the result of the operation.
+    """
+    try:
+        book_rec_system.AddBook(book)
+        return {"message": "Book added successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

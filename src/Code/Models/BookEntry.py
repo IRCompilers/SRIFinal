@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class BookEntry:
+class BookEntry(BaseModel):
     Title: str
     Author: str
     Year: int

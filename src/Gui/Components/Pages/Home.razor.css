@@ -189,7 +189,7 @@
     left: 5%;
 }
 
-.user-input, .autocomplete-input, .search {
+.user-input, .autocomplete-input, .search, .add {
     position: absolute;
     top: 0;
     left: 20%;
@@ -200,6 +200,10 @@
 
 .search{
     left: calc(20% + 175px);
+}
+
+.add{
+    left: calc(20% + 235px);
 }
 
 .search-button{

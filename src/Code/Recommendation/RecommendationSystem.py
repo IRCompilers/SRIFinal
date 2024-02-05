@@ -167,12 +167,13 @@ class BookRecommendationSystem:
         except FileNotFoundError:
             print("Error loading resources - Files where not found. Please add books to the system first.")
 
-    def Query(self, query: str) -> List[BookCard]:
+    def Query(self, query: str, previously_read_books: List[str]) -> List[BookCard]:
         """
         Queries the system with the given query string. Uses matrix cosine similarity to find the most similar books.
 
         Args:
             query (str): The query string.
+            previously_read_books (str): A list of book titles that the user has previously read.
 
         Returns:
             List[BookCard]: A list of book cards that match the query string.
@@ -183,6 +184,8 @@ class BookRecommendationSystem:
         index = similarities.MatrixSimilarity([bucket.Vector for bucket in self.book_buckets])
         sims = index[query_vector]
 
+        self.HandlePreviouslyReadBooks(previously_read_books, sims[0])
+
         with ThreadPoolExecutor() as executor:
             book_cards = list(executor.map(self.CreateBookCard, enumerate(sims[0])))
 
@@ -191,6 +194,27 @@ class BookRecommendationSystem:
         book_cards = sorted(book_cards, key=lambda x: x.Rating, reverse=True)
 
         return book_cards
+
+    def HandlePreviouslyReadBooks(self, previously_read_books: list, similarities: dict):
+        """
+        Increase the similarity scores for books with tags that match those of the previously read books.
+
+        Args:
+            previously_read_books (list): A list of book titles that the user has previously read.
+            similarities (dict): A dictionary of similarity scores for each book.
+        """
+        tag_counts = {}
+
+        for book in self.book_buckets:
+            if book.Title in previously_read_books:
+                for tag in book.Tags:
+                    tag_counts[tag] = tag_counts.get(tag, 0) + 1
+
+        for i in range(len(self.book_buckets)):
+            book = self.book_buckets[i]
+            for tag in book.Tags:
+                if tag in tag_counts:
+                    similarities[i] += (tag_counts[tag] * 0.3)
 
     def CreateBookCard(self, sim_tuple: (int, float)) -> BookCard | None:
         """

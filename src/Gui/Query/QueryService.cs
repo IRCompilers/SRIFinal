@@ -8,9 +8,14 @@ public class QueryService(IHttpClientFactory httpClientFactory, IConfiguration c
     private readonly HttpClient _httpClient = httpClientFactory.CreateClient();
     private readonly string _baseAddress = configuration.GetSection("ApiSettings:BaseAddress").Value ?? throw new InvalidOperationException("BaseAddress not provided in appsettings.json");
 
-    public async Task<BookCard[]> QueryAsync(string query)
+    public async Task<BookCard[]> QueryAsync(string query, string previouslyRead = "")
     {
-        var response = await _httpClient.GetAsync($"{_baseAddress}/query?query={query}");
+        var url = $"{_baseAddress}/query?query={query}";
+        
+        if(previouslyRead != "")
+            url += $"&previouslyRead={previouslyRead}";
+        
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<BookCard[]>() ?? throw new InvalidOperationException("Response was not in the correct format.");
     }

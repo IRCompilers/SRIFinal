@@ -3,6 +3,6 @@ namespace Gui.Events;
 public interface IEventService
 {
     // Query search
-    public event Action<string> OnQuerySearch;
-    public void TriggerOnQuerySearch(string query);
+    public event Func<(string query, string read), Task> OnQuerySearch;
+    public void TriggerOnQuerySearch((string, string) query);
 }

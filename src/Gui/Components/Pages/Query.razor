@@ -15,6 +15,17 @@
     <button @onclick="Search"><i class="fas fa-search"></i></button>
 </div>
 
+<div class="search-input">
+    <input @bind="query"
+           @oninput="FetchAutoComplete"
+           @onkeyup="HandleKeyDown"
+           placeholder="@PickRandomPlaceholder()"
+           @ref="_inputElement"
+           type="text"/>
+    <input class="ghost-input" readonly type="text" value="@ghostQuery" />
+    <button @onclick="Search"><i class="fas fa-search"></i></button>
+</div>
+
 <script>
     window.handleKeyDown = function (element) {
         element.addEventListener('keydown', function (e) {
@@ -28,11 +39,12 @@
 @code {
     private string query { get; set; } = null!;
     private string ghostQuery { get; set; } = null!;
+    private string previouslyRead { get; set; } = null!;
     private ElementReference _inputElement;
 
     private void Search()
     {
-        eventService.TriggerOnQuerySearch(query);
+        eventService.TriggerOnQuerySearch((query, previouslyRead));
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)

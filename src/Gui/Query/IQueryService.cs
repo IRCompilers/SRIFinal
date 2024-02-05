@@ -4,6 +4,6 @@ namespace Gui.Query;
 
 public interface IQueryService
 {
-    Task<BookCard[]> QueryAsync(string query);
+    Task<BookCard[]> QueryAsync(string query, string previouslyRead = "");
     Task<string> AutoCompleteAsync(string query); 
 }

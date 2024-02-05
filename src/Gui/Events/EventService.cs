@@ -2,9 +2,9 @@ namespace Gui.Events;
 
 public class EventService : IEventService
 {
-    public event Action<string> OnQuerySearch = null!;
+    public event Func<(string, string), Task> OnQuerySearch = null!;
 
-    public void TriggerOnQuerySearch(string query)
+    public void TriggerOnQuerySearch((string, string) query)
     {
         OnQuerySearch?.Invoke(query);
     }

@@ -9,17 +9,19 @@ book_rec_system = BookRecommendationSystem()
 
 
 @app.get("/query")
-def query_books(query: str):
+def query_books(query: str, previouslyRead: str = ''):
     """
-    Query books based on the provided query string.
+    Query books based on the provided query string and previously read books.
 
     Args:
         query (str): The query string to search for in the books.
+        previouslyRead (str): A string of comma-separated book titles that the user has previously read.
 
     Returns:
         list: A list of books that match the query string.
     """
-    return book_rec_system.Query(query)
+    previously_read_books = previouslyRead.split(',') if previouslyRead else []
+    return book_rec_system.Query(query, previously_read_books)
 
 
 @app.get("/autocomplete")

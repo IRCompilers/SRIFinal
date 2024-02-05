@@ -1,7 +1,8 @@
 @using Gui.Events
 @using Gui.Models
+@using Gui.Query
 @inject IEventService EventService
-
+@inject IQueryService QueryService
 
 <div class="list-container">
     @foreach (var book in books)
@@ -32,27 +33,17 @@
 
 @code {
 
-    private IEnumerable<BookCard> books =
-    [
-        new BookCard("Author 1", "Title 1", "This is the longest description you are ever going to need, I'm I not correct?. This is the longest description you are ever going to need, I'm I not correct.This is the longest description you are ever going to need, I'm I not correct.This is the longest description you are ever going to need, I'm I not correct.This is the longest description you are ever going to need, I'm I not correct.This is the longest description you are ever going to need, I'm I not correct.This is the longest description you are ever going to need, I'm I not correct", 2001, 2.3f, "cover0.jpeg", "url1", ["tag1", "tag2"]),
-        new BookCard("Author 2", "Title 2", "Description 2", 2002, 2.3f, "cover1.jpeg", "url1", ["tag1", "tag2"]),
-        new BookCard("Author 3", "Title 3", "Description 3", 3002, 2.3f, "cover2.jpeg", "url1", ["tag1", "tag2"]),
-        new BookCard("Author 4", "Title 4", "Description 4", 4002, 2.3f, "cover3.jpeg", "url1", ["tag1", "tag2"]),
-    ];
+    private IEnumerable<BookCard> books = [];
 
     protected override void OnInitialized()
     {
         EventService.OnQuerySearch += HandleQuerySearch;
     }
 
-    private void HandleQuerySearch(string query)
+    private async Task HandleQuerySearch((string query, string read) query)
     {
-        Console.WriteLine("List: " + query);
-    }
-
-    public void Dispose()
-    {
-        EventService.OnQuerySearch -= HandleQuerySearch;
+        books =  await QueryService.QueryAsync(query.query, query.read);
+        StateHasChanged();
     }
 
 }

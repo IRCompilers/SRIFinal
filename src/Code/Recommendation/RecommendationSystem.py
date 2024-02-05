@@ -189,7 +189,7 @@ class BookRecommendationSystem:
         with ThreadPoolExecutor() as executor:
             book_cards = list(executor.map(self.CreateBookCard, enumerate(sims[0])))
 
-        book_cards = [book_card for book_card in book_cards if book_card is not None]
+        book_cards = [book_card for book_card in book_cards if book_card is not None and book_card.Title not in previously_read_books]
 
         book_cards = sorted(book_cards, key=lambda x: x.Rating, reverse=True)
 

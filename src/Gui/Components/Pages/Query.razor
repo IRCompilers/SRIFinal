@@ -4,26 +4,28 @@
 @inject IEventService eventService
 @inject IJSRuntime JsRuntime
 
-<div class="search-input">
-    <input @bind="query"
+<div class="search-input mb-2">
+    <input class="top-input"
+           @bind="query"
            @oninput="FetchAutoComplete"
            @onkeyup="HandleKeyDown"
-           placeholder="@PickRandomPlaceholder()"
+           placeholder="@queryPlaceholder"
            @ref="_inputElement"
            type="text"/>
-    <input class="ghost-input" readonly type="text" value="@ghostQuery" />
-    <button @onclick="Search"><i class="fas fa-search"></i></button>
+    <input class="ghost-input top-input" readonly type="text" value="@ghostQuery"/>
+    <button class="search-button" @onclick="Search">
+        <i class="fas fa-search"></i>
+    </button>
 </div>
 
 <div class="search-input">
-    <input @bind="query"
-           @oninput="FetchAutoComplete"
-           @onkeyup="HandleKeyDown"
-           placeholder="@PickRandomPlaceholder()"
-           @ref="_inputElement"
+    <input class="bottom-input"
+           @bind="previouslyRead"
+           placeholder="@readPlaceholder"
            type="text"/>
-    <input class="ghost-input" readonly type="text" value="@ghostQuery" />
-    <button @onclick="Search"><i class="fas fa-search"></i></button>
+    <button class="id-button-right">
+        <i class="fas fa-book"></i>
+    </button>
 </div>
 
 <script>
@@ -37,6 +39,9 @@
 </script>
 
 @code {
+    private string queryPlaceholder { get; set; } = null!;
+    private string readPlaceholder { get; set; } = null!;
+
     private string query { get; set; } = null!;
     private string ghostQuery { get; set; } = null!;
     private string previouslyRead { get; set; } = null!;
@@ -46,15 +51,18 @@
     {
         eventService.TriggerOnQuerySearch((query, previouslyRead));
     }
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            queryPlaceholder = PickRandomPlaceholder();
+            readPlaceholder = PickRandomPlaceholderRead();
             await JsRuntime.InvokeVoidAsync("handleKeyDown", _inputElement);
+            StateHasChanged();
         }
     }
-    
+
     private async Task FetchAutoComplete(ChangeEventArgs e)
     {
         var wholeInput = e.Value!.ToString()!;
@@ -74,7 +82,21 @@
             "I'm a fan of romance ...",
             "Historical fiction is the best ...",
         ];
-        
+
+        return placeholders[new Random().Next(0, placeholders.Length)];
+    }
+
+    private string PickRandomPlaceholderRead()
+    {
+        string[] placeholders =
+        [
+            "Foundation, The Lord of the Rings, The Hobbit ...",
+            "Sherlock Holmes, Hercule Poirot, Miss Marple ...",
+            "Harry Potter, The Witcher, The Wheel of Time ...",
+            "Dracula, Frankenstein, The Shining ...",
+            "Pride and Prejudice, Wuthering Heights, Jane Eyre ...",
+        ];
+
         return placeholders[new Random().Next(0, placeholders.Length)];
     }
 

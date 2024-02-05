@@ -20,7 +20,7 @@ def query_books(query: str, previouslyRead: str = ''):
     Returns:
         list: A list of books that match the query string.
     """
-    previously_read_books = previouslyRead.split(',') if previouslyRead else []
+    previously_read_books = [book.strip() for book in previouslyRead.split(',')] if previouslyRead else []
     return book_rec_system.Query(query, previously_read_books)
 
 

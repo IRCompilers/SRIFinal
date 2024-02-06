@@ -23,7 +23,12 @@ public class QueryService(IHttpClientFactory httpClientFactory, IConfiguration c
     public async Task<string> AutoCompleteAsync(string query)
     {
         var response = await _httpClient.GetAsync($"{_baseAddress}/autocomplete?query={query}");
-        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
+    }
+
+    public async Task<string> AutoCompleteBookAsync(string query)
+    {
+        var response = await _httpClient.GetAsync($"{_baseAddress}/autocomplete?query={query}&is_book=true");
         return await response.Content.ReadAsStringAsync();
     }
 }

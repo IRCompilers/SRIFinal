@@ -41,6 +41,8 @@ class BookRecommendationSystem:
         a list of book buckets
     autocomplete : Trie
         a Trie data structure for autocomplete functionality
+    autocomplete-books : Trie
+        a Trie data structure for autocomplete functionality for books
 
     Methods
     -------
@@ -62,6 +64,7 @@ class BookRecommendationSystem:
         self.dictionary = None
         self.book_buckets = None
         self.autocomplete = Trie()
+        self.autocomplete_books = Trie()
         self.LoadResources()
 
     @staticmethod
@@ -72,14 +75,19 @@ class BookRecommendationSystem:
             Args:
                 books (List[BookEntry]): The list of books to add.
         """
-        texts = [book.Text for book in books]
+        texts = [book.Description for book in books]
         preprocessed_documents = Preprocess(texts)
         trie = Trie()
 
         for word in flatten_list(preprocessed_documents):
             trie.Insert(word)
 
+        booksTrie = Trie()
+        for title in [book.Title for book in books]:
+            booksTrie.Insert(title)
+
         SaveTrieToJson(trie, "Resources/autocomplete_trie.json")
+        SaveTrieToJson(booksTrie, "Resources/autocomplete_books_trie.json")
 
         tags = BookRecommendationSystem.PredictTagsInParallel(preprocessed_documents)
 
@@ -95,9 +103,8 @@ class BookRecommendationSystem:
             book (BookEntry): The book to add.
         """
         # Preprocess the book text
-
-        books_texts = [bucket.Text for bucket in self.book_buckets]
-        books_texts.append(book.Text)
+        books_texts = [bucket.Description for bucket in self.book_buckets]
+        books_texts.append(book.Description)
 
         preprocessed_text = Preprocess(books_texts)
 
@@ -118,7 +125,6 @@ class BookRecommendationSystem:
             Year=book.Year,
             Description=book.Description,
             ImageUrl=book.ImageUrl,
-            Text=book.Text,
             Tags=tags[-1],
             Url=book.Url,
             Vector=vectorized_text[-1]
@@ -164,6 +170,8 @@ class BookRecommendationSystem:
                 self.dictionary = corpora.Dictionary.load('Resources/dictionary.pkl')
             if len(self.autocomplete.root.children) == 0:
                 LoadTrieFromJson(self.autocomplete, 'Resources/autocomplete_trie.json')
+            if len(self.autocomplete_books.root.children) == 0:
+                LoadTrieFromJson(self.autocomplete_books, 'Resources/autocomplete_books_trie.json')
         except FileNotFoundError:
             print("Error loading resources - Files where not found. Please add books to the system first.")
 
@@ -189,7 +197,8 @@ class BookRecommendationSystem:
         with ThreadPoolExecutor() as executor:
             book_cards = list(executor.map(self.CreateBookCard, enumerate(sims[0])))
 
-        book_cards = [book_card for book_card in book_cards if book_card is not None and book_card.Title not in previously_read_books]
+        book_cards = [book_card for book_card in book_cards if
+                      book_card is not None and book_card.Title not in previously_read_books]
 
         book_cards = sorted(book_cards, key=lambda x: x.Rating, reverse=True)
 
@@ -240,14 +249,19 @@ class BookRecommendationSystem:
             )
         return None
 
-    def AutoComplete(self, query: str) -> str:
+    def AutoComplete(self, query: str, is_book: bool) -> str:
         """
         Returns the most common autocomplete suggestion for the given query string.
 
         Args:
             query (str): The query string.
+            is_book (bool): If the query is to autocomplete books or not
 
         Returns:
             list: A suffix suggestion.
         """
-        return self.autocomplete.MostCommon(query)
+
+        if is_book:
+            return self.autocomplete_books.MostCommon(query)
+        else:
+            return self.autocomplete.MostCommon(query)

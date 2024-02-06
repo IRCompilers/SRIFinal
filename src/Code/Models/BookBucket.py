@@ -10,7 +10,6 @@ class BookBucket:
     Description: str
     ImageUrl: str
     Url: str
-    Text: str
     Tags: List[str] = field(default_factory=list)
     Vector: List[float] = field(default_factory=list)
 
@@ -21,7 +20,6 @@ class BookBucket:
             "Year": self.Year,
             "Description": self.Description,
             "ImageUrl": self.ImageUrl,
-            "Text": self.Text,
             "Url": self.Url,
             "Tags": self.Tags,
             "Vector": self.Vector

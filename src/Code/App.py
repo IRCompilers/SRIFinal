@@ -25,17 +25,18 @@ def query_books(query: str, previouslyRead: str = ''):
 
 
 @app.get("/autocomplete")
-def auto_complete(query: str):
+def auto_complete(query: str, is_book: bool = False):
     """
     Autocomplete the query based on the provided query string.
 
     Args:
         query (str): The query string to autocomplete.
+        is_book (bool): If the query is to autocomplete books or not
 
     Returns:
         list: A list of possible completions for the query string.
     """
-    return book_rec_system.AutoComplete(query)
+    return book_rec_system.AutoComplete(query, is_book)
 
 
 @app.get("/sample")

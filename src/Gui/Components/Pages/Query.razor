@@ -18,15 +18,29 @@
     </button>
 </div>
 
-<div class="search-input">
+<div class="search-input mb-2">
     <input class="bottom-input"
-           @bind="previouslyRead"
-           placeholder="@readPlaceholder"
+           @bind="queryBook"
+           @oninput="FetchAutoCompleteBook"
+           @onkeyup="HandleKeyDownBook"
+           placeholder="@bookPlaceholder"
+           @ref="_inputElement2"
            type="text"/>
-    <button class="id-button-right">
+    <input class="ghost-input top-input" readonly type="text" value="@ghostQueryBook"/>
+    <button class="search-button" @onclick="Search">
         <i class="fas fa-book"></i>
     </button>
 </div>
+
+@* <div class="search-input"> *@
+@*     <input class="bottom-input" *@
+@*            @bind="previouslyRead" *@
+@*            placeholder="@bookPlaceholder" *@
+@*            type="text"/> *@
+@*     <button class="id-button-right"> *@
+@*         <i class="fas fa-book"></i> *@
+@*     </button> *@
+@* </div> *@
 
 <script>
     window.handleKeyDown = function (element) {
@@ -40,16 +54,20 @@
 
 @code {
     private string queryPlaceholder { get; set; } = null!;
-    private string readPlaceholder { get; set; } = null!;
+    private string bookPlaceholder { get; set; } = null!;
 
     private string query { get; set; } = null!;
+    private string queryBook { get; set; } = null!;
     private string ghostQuery { get; set; } = null!;
-    private string previouslyRead { get; set; } = null!;
+    private string ghostQueryBook { get; set; } = null!;
+    
     private ElementReference _inputElement;
+    private ElementReference _inputElement2;
 
     private void Search()
     {
-        eventService.TriggerOnQuerySearch((query, previouslyRead));
+        Console.WriteLine((query, queryBook));
+        eventService.TriggerOnQuerySearch((query, queryBook));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -57,18 +75,11 @@
         if (firstRender)
         {
             queryPlaceholder = PickRandomPlaceholder();
-            readPlaceholder = PickRandomPlaceholderRead();
+            bookPlaceholder = PickRandomPlaceholderRead();
             await JsRuntime.InvokeVoidAsync("handleKeyDown", _inputElement);
+            await JsRuntime.InvokeVoidAsync("handleKeyDown", _inputElement2);
             StateHasChanged();
         }
-    }
-
-    private async Task FetchAutoComplete(ChangeEventArgs e)
-    {
-        var wholeInput = e.Value!.ToString()!;
-        var toAutocomplete = wholeInput.Split().Last();
-        var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteAsync(toAutocomplete ?? "");
-        ghostQuery = wholeInput + result.Replace("\"", "");
     }
 
     private string PickRandomPlaceholder()
@@ -100,6 +111,14 @@
         return placeholders[new Random().Next(0, placeholders.Length)];
     }
 
+    private async Task FetchAutoComplete(ChangeEventArgs e)
+    {
+        var wholeInput = e.Value!.ToString()!;
+        var toAutocomplete = wholeInput.Split().Last();
+        var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteAsync(toAutocomplete ?? "");
+        ghostQuery = wholeInput + result.Replace("\"", "");
+    }
+
     private void HandleKeyDown(KeyboardEventArgs e)
     {
         switch (e.Key)
@@ -109,6 +128,30 @@
                 break;
             case "Tab":
                 query = ghostQuery;
+                break;
+        }
+    }
+
+    private async Task FetchAutoCompleteBook(ChangeEventArgs e)
+    {
+        var wholeInput = e.Value!.ToString()!;
+        Console.WriteLine("Whole: " + wholeInput);
+        Console.WriteLine("Whole: " + wholeInput);
+        var toAutocomplete = wholeInput.Split(',', StringSplitOptions.TrimEntries).Last();
+        var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteBookAsync(toAutocomplete ?? "");
+        Console.WriteLine("Autocomplete: " + result);
+        ghostQueryBook = wholeInput + result.Replace("\"", "");
+    }
+
+    private void HandleKeyDownBook(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Enter":
+                Search();
+                break;
+            case "Tab":
+                queryBook = ghostQueryBook;
                 break;
         }
     }

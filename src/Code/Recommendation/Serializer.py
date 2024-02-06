@@ -24,7 +24,6 @@ def SaveBooksToJson(books: List[BookEntry], vectorized_documents=None, tags=None
             Description=book.Description,
             ImageUrl=book.ImageUrl,
             Tags=tags[0],
-            Text=book.Text,
             Url=book.Url,
             Vector=vector
         )
@@ -55,7 +54,6 @@ def LoadBooksFromJson(filename: str) -> List[BookBucket]:
             Year=book_dict["Year"],
             Description=book_dict["Description"],
             ImageUrl=book_dict["ImageUrl"],
-            Text=book_dict["Text"],
             Url=book_dict["Url"],
             Tags=book_dict["Tags"],
             Vector=book_dict["Vector"]

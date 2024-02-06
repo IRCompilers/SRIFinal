@@ -6,6 +6,5 @@ class BookEntry(BaseModel):
     Author: str
     Year: int
     Description: str
-    Text: str
     ImageUrl: str
     Url: str

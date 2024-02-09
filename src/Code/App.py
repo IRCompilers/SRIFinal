@@ -1,3 +1,5 @@
+import json
+
 from fastapi import FastAPI, HTTPException
 
 from src.Code.Models.BookEntry import BookEntry
@@ -74,3 +76,28 @@ def add_book(book: BookEntry):
         return {"message": "Book added successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/add-books")
+def add_books():
+    """
+    Add books to the recommendation system.
+
+    Returns:
+        dict: A message indicating the result of the operation.
+    """
+    books = []
+    with open('data.json', 'r') as json_file:
+        data = json.load(json_file)
+
+        for item in data:
+            book = BookEntry(Title=item['title'], Author=item['author'], Year=item['year'],
+                             Description=item['description'], ImageUrl=item['image'], Url='')
+            books.append(book)
+
+    try:
+        book_rec_system.AddBooks(books)
+        return {"message": "Books added successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+

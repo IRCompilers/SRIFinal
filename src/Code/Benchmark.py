@@ -14,7 +14,7 @@ def query_function(query_system, query):
     Returns:
         list: A list of books that match the query string.
     """
-    return query_system.Query(query)
+    return query_system.Query(query, previously_read_books=[])
 
 
 def time_query(system, query):

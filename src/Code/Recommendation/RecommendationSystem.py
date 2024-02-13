@@ -11,7 +11,7 @@ from src.Code.Models.BookBucket import BookBucket
 from src.Code.Models.BookCard import BookCard
 from src.Code.Recommendation.Preprocessor import Preprocess
 from src.Code.Recommendation.Serializer import SaveBooksToJson, LoadBooksFromJson, SaveTrieToJson, LoadTrieFromJson
-from src.Code.Recommendation.Tagger import PredictTags
+from src.Code.Recommendation.Tagger import Tagger
 from src.Code.Recommendation.Vectorizer import Vectorize
 from src.Code.Trie.Trie import Trie
 
@@ -77,6 +77,8 @@ class BookRecommendationSystem:
         """
         texts = [book.Description for book in books]
         preprocessed_documents = Preprocess(texts)
+
+        print("Started triing ...")
         trie = Trie()
 
         for word in flatten_list(preprocessed_documents):
@@ -86,14 +88,22 @@ class BookRecommendationSystem:
         for title in [book.Title for book in books]:
             booksTrie.Insert(title)
 
+        print("Starting saving to json ...")
+
         SaveTrieToJson(trie, "Resources/autocomplete_trie.json")
         SaveTrieToJson(booksTrie, "Resources/autocomplete_books_trie.json")
 
+        print("Started predicting tags ...")
         tags = BookRecommendationSystem.PredictTagsInParallel(preprocessed_documents)
 
+        print("Started vectorizing ...")
         vectorized_documents, dictionary = Vectorize(preprocessed_documents)
         SaveBooksToJson(books, vectorized_documents, tags, 'Resources/books.json')
+
+        print("Started saving dictionary")
         dictionary.save('Resources/dictionary.pkl')
+
+        print("Ended")
 
     def AddBook(self, book: BookEntry):
         """
@@ -151,10 +161,12 @@ class BookRecommendationSystem:
         """
         descriptions = [description for description in corpus_descriptions]
 
+        tagger = Tagger()
+
         # Create a ThreadPoolExecutor
         with ThreadPoolExecutor() as executor:
             # Use the executor to map the predict_tags function to the descriptions
-            predicted_tags = list(executor.map(PredictTags, descriptions))
+            predicted_tags = list(executor.map(tagger.PredictTags, descriptions))
 
         return predicted_tags
 

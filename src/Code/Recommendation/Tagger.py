@@ -6,7 +6,6 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from src.Code.Recommendation.Sampler import get_hardcoded_book_descriptions, get_hardcoded_book_tags
 
 
 def TrainModel(descriptions: List[str], tags: List[List[str]]):
@@ -41,31 +40,32 @@ def TrainModel(descriptions: List[str], tags: List[List[str]]):
     return classifier, vectorizer, mlb
 
 
-def PredictTags(description_words: List[str]) -> List[str]:
-    """
-    Predicts the tags for a given book description.
+class Tagger:
+    def __init__(self):
+        self.classifier = joblib.load('Resources/classifier.joblib')
+        self.vectorizer = joblib.load('Resources/vectorizer.joblib')
+        self.mlb = joblib.load('Resources/mlb.joblib')
 
-    Args:
-        description_words (list): A list of words in the book description.
+    def PredictTags(self, description_words: List[str]) -> List[str]:
+        """
+        Predicts the tags for a given book description.
 
-    Returns:
-        list: A list of predicted tags for the book.
-    """
-    # Load the trained model, vectorizer, and mlb from disk
-    classifier = joblib.load('Resources/classifier.joblib')
-    vectorizer = joblib.load('Resources/vectorizer.joblib')
-    mlb = joblib.load('Resources/mlb.joblib')
+        Args:
+            description_words (list): A list of words in the book description.
 
-    # Convert the description words into a single string
-    new_description = ' '.join(description_words)
+        Returns:
+            list: A list of predicted tags for the book.
+        """
+        # Convert the description words into a single string
+        new_description = ' '.join(description_words)
 
-    # Convert the new description to a TF-IDF vector
-    new_tfidf = vectorizer.transform([new_description])
+        # Convert the new description to a TF-IDF vector
+        new_tfidf = self.vectorizer.transform([new_description])
 
-    # Predict the binary tags of the new book
-    predicted_binary_tags = classifier.predict(new_tfidf)
+        # Predict the binary tags of the new book
+        predicted_binary_tags = self.classifier.predict(new_tfidf)
 
-    # Convert the predicted binary tags back to the original tag format
-    predicted_tags = mlb.inverse_transform(predicted_binary_tags)
+        # Convert the predicted binary tags back to the original tag format
+        predicted_tags = self.mlb.inverse_transform(predicted_binary_tags)
 
-    return predicted_tags
+        return predicted_tags

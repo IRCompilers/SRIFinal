@@ -8,10 +8,10 @@
 }
 
 body {
-    background-color: var(--main-color);
-    color: var(--secondary-color);
-    font-family: var(--font-family);
-    font-size: var(--font-size);
+    background-color: var(--main-color) !important;
+    color: var(--secondary-color) !important;
+    font-family: var(--font-family) !important;
+    font-size: var(--font-size) !important;
 }
 
 a, .btn-link {

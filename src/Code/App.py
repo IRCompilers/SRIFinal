@@ -9,7 +9,7 @@ book_rec_system = BookRecommendationSystem()
 
 
 @app.get("/query")
-def query_books(query: str, page: int = 0, pageSize: int = 2, previouslyRead: str = ''):
+def query_books(query: str, page: int = 0, pageSize: int = 10, previouslyRead: str = ''):
     """
     Query books based on the provided query string and previously read books.
 

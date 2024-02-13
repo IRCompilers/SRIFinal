@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="Blazor.Bootstrap" Version="1.11.1" />
+      <PackageReference Include="MudBlazor" Version="6.15.0" />
     </ItemGroup>
 
     <ItemGroup>

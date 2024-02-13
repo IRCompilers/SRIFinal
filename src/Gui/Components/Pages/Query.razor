@@ -124,11 +124,8 @@
     private async Task FetchAutoCompleteBook(ChangeEventArgs e)
     {
         var wholeInput = e.Value!.ToString()!;
-        Console.WriteLine("Whole: " + wholeInput);
-        Console.WriteLine("Whole: " + wholeInput);
         var toAutocomplete = wholeInput.Split(',', StringSplitOptions.TrimEntries).Last();
         var result = string.IsNullOrWhiteSpace(toAutocomplete) ? "" : await QueryService.AutoCompleteBookAsync(toAutocomplete ?? "");
-        Console.WriteLine("Autocomplete: " + result);
         ghostQueryBook = wholeInput + result.Replace("\"", "");
     }
 

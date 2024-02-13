@@ -1,6 +1,7 @@
 using Gui.Components;
 using Gui.Events;
 using Gui.Query;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddMudServices();
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IEventService, EventService>();

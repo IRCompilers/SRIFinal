@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
 # External imports
-from gensim import similarities, corpora
+from gensim import corpora, similarities
 
 # Internal imports
 from src.Code.Models import BookEntry
@@ -75,8 +75,10 @@ class BookRecommendationSystem:
             Args:
                 books (List[BookEntry]): The list of books to add.
         """
+
+        print("Started preprocessing ...")
         texts = [book.Description for book in books]
-        preprocessed_documents = Preprocess(texts)
+        preprocessed_documents = Preprocess(texts, 4)
 
         print("Started triing ...")
         trie = Trie()
@@ -277,3 +279,23 @@ class BookRecommendationSystem:
             return self.autocomplete_books.MostCommon(query)
         else:
             return self.autocomplete.MostCommon(query)
+
+
+import time
+
+
+class Stopwatch:
+    def __init__(self):
+        self.start_time = None
+        self.end_time = None
+
+    def start(self):
+        self.start_time = time.time()
+
+    def stop(self):
+        self.end_time = time.time()
+
+    def elapsed_time(self):
+        if self.end_time is None:
+            return time.time() - self.start_time
+        return self.end_time - self.start_time

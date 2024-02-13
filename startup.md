@@ -1,5 +1,13 @@
 # Startup
 
+## First input
+
+Execute the Populate.py file in the root directory to load the documents the first time with
+
+```bash
+   python3 Populate.py
+```
+
 ## Api
 
 The main logic for the processing is in the api. To run it run the following command in the root directory:

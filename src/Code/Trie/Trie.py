@@ -1,13 +1,10 @@
-from collections import defaultdict
-
-
 class TrieNode:
     def __init__(self, char: str = '', word: str = '', count: int = 0):
         self.char = char
-        self.children = defaultdict(TrieNode)
-        self.count = 0
-        self.mcs = word
-        self.mcs_count = count
+        self.children = {}
+        self.count = count
+        self.mcs = ''  # most common string
+        self.mcs_count = 0  # count of most common string
 
 
 class Trie:
@@ -22,7 +19,7 @@ class Trie:
                 node.children[char] = TrieNode(char)
             node = node.children[char]
             nodes.append(node)
-        node.count = node.count + 1
+        node.count += 1
         count = node.count
 
         i = 0
@@ -30,7 +27,6 @@ class Trie:
             if path_node.mcs_count < count:
                 path_node.mcs_count = count
                 path_node.mcs = word[i:]
-
             i += 1
 
     def MostCommon(self, prefix):

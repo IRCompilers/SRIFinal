@@ -32,16 +32,6 @@
     </button>
 </div>
 
-@* <div class="search-input"> *@
-@*     <input class="bottom-input" *@
-@*            @bind="previouslyRead" *@
-@*            placeholder="@bookPlaceholder" *@
-@*            type="text"/> *@
-@*     <button class="id-button-right"> *@
-@*         <i class="fas fa-book"></i> *@
-@*     </button> *@
-@* </div> *@
-
 <script>
     window.handleKeyDown = function (element) {
         element.addEventListener('keydown', function (e) {
@@ -66,8 +56,7 @@
 
     private void Search()
     {
-        Console.WriteLine((query, queryBook));
-        eventService.TriggerOnQuerySearch((query, queryBook));
+        eventService.TriggerOnQuerySearch((query, queryBook, 1));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

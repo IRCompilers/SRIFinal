@@ -9,19 +9,28 @@ book_rec_system = BookRecommendationSystem()
 
 
 @app.get("/query")
-def query_books(query: str, previouslyRead: str = ''):
+def query_books(query: str, page: int = 0, pageSize: int = 2, previouslyRead: str = ''):
     """
     Query books based on the provided query string and previously read books.
 
     Args:
         query (str): The query string to search for in the books.
         previouslyRead (str): A string of comma-separated book titles that the user has previously read.
+        page (int): The page number for pagination. Each page contains pageSize results.
+        pageSize (int): The number of results to return per page.
 
     Returns:
-        list: A list of books that match the query string.
+        page: A list of books that match the query string and a total amount of results.
     """
+
+    page = page - 1
     previously_read_books = [book.strip() for book in previouslyRead.split(',')] if previouslyRead else []
-    return book_rec_system.Query(query, previously_read_books)
+    all_results = book_rec_system.Query(query, previously_read_books)
+    paginated_results = all_results[page * pageSize:(page + 1) * pageSize]
+    print("All Results: ", all_results)
+    print("Results: ", paginated_results)
+    print("Total: ", len(all_results))
+    return {"results": paginated_results, "total": len(all_results)}
 
 
 @app.get("/autocomplete")

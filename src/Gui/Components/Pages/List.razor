@@ -4,6 +4,21 @@
 @inject IEventService EventService
 @inject IQueryService QueryService
 
+
+@* @if (totalPages != 0) *@
+@* { *@
+<Pagination Class="my-pagination"
+            ActivePageNumber="@currentPage"
+            TotalPages="@totalPages"
+            FirstLinkIcon="IconName.ChevronDoubleLeft"
+            PreviousLinkIcon="IconName.ChevronLeft"
+            NextLinkIcon="IconName.ChevronRight"
+            Alignment="Alignment.Center"
+            LastLinkIcon="IconName.ChevronDoubleRight"
+            PageChanged="OnPageChangedAsync"/>
+@* } *@
+
+
 <div class="list-container">
     @foreach (var book in books)
     {
@@ -31,7 +46,14 @@
     }
 </div>
 
+
 @code {
+
+    private int totalPages = 0;
+    private int currentPage = 1;
+
+    private string queryString = "";
+    private string previouslyRead = "";
 
     private IEnumerable<BookCard> books = [];
 
@@ -40,9 +62,40 @@
         EventService.OnQuerySearch += HandleQuerySearch;
     }
 
-    private async Task HandleQuerySearch((string query, string read) query)
+    private async Task HandleQuerySearch((string query, string read, int pageNumber) query)
     {
-        books =  await QueryService.QueryAsync(query.query, query.read);
+        var result = await QueryService.QueryAsync(query.query, query.read, query.pageNumber);
+        this.queryString = query.query;
+        this.previouslyRead = query.read;
+        this.currentPage = query.pageNumber;
+        totalPages = result.Total / 2;
+
+        Console.WriteLine($"Total pages: {totalPages}");
+        
+        if (result.Total % 2 != 0)
+        {
+            totalPages++;
+        }
+        
+        Console.WriteLine($"Total pages: {totalPages}");
+
+
+        books = result.Results;
+        StateHasChanged();
+    }
+
+    private async Task OnPageChangedAsync(int pageNumber)
+    {
+        currentPage = pageNumber;
+        var result = await QueryService.QueryAsync(queryString, previouslyRead, currentPage);
+        totalPages = result.Total / 2;
+
+        if (result.Total % 2 != 0)
+        {
+            totalPages++;
+        }
+
+        books = result.Results;
         StateHasChanged();
     }
 

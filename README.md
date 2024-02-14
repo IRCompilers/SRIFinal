@@ -2,6 +2,12 @@
 
 The final project for SRI. This is a simple book recommendation system. It uses a simple search engine to find books that contain the query and then uses a simple recommendation system to recommend books based on the books found.
 
+## Authors
+
+> Hector Miguel Rodriguez Sosa C411
+
+> Sebastian Suarez Gomez C411
+
 ## Technical
 
 In this section we will discuss the technical details of the project, divided in the main 3 core features: **query**, **autocomplete** and **tagging**.
@@ -39,3 +45,19 @@ The tagging feature in this project is implemented using a machine learning mode
 3. **Predicting Tags**: The `PredictTags` function is used to predict tags for a given book description. The trained model, vectorizer, and MultiLabelBinarizer are loaded from disk using `joblib.load`. The book description is converted to a TF-IDF vector and then passed to the model for prediction. The model predicts the binary tags of the book, which are then converted back to the original tag format using `mlb.inverse_transform`.
 
 In essence, the model is learning the relationship between the wording of a book description and the tags that are relevant to it. Once trained, it can predict the tags for a new book description based on what it has learned.
+
+## Query
+
+The query has 2 components.
+1. The `vectorization model` using TF-IDF in a bag of words, and the cosine similarity to find the most similar books with the query.
+2. The `brute force tag matching` to find the books that match the tags of the previously read books.
+
+The first component is straightforward, it's already explained in the technical section.
+
+The second component is basically to find the books that have an intersection in tags with the previously read books. This is the component that contributes the most to the overall query score, since the user is most likely to read a book that has topics or genres in common with the ones they have previously read than the ones that match the query.
+
+## TODO Improvements
+
+- [ ] For now the query doesn't support semantic checking, so technically it's just a bag of words. It would be nice to have a semantic search engine because as of now the queries "I like books where the main character loves his father" and "I hate books where the main character loves his father" are mostly the same and that's not ok.
+- [ ] The autocomplete is not perfect. It would be nice to have a more efficient way to find the most common suffix of the words in the trie. Plus autocompleting is just word by word or book by book there's no way to predict a whole statement
+- [ ] Tagging could be improved by adding more books to the sample when training the model.

@@ -65,10 +65,10 @@
 
 .book-card .book-cover .book-description {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100% - 20px); /* Subtracting the left and right margin */
-    height: calc(100% - 20px); /* Subtracting the top and bottom margin */
+    top: -5px;
+    left: -5px;
+    width: calc(100% - 5px); /* Subtracting the left and right margin */
+    height: calc(100% - 10px); /* Subtracting the top and bottom margin */
     margin: 10px; /* Adding margin */
     padding: 10px; /* Adding padding for the scrollable content */
     background: rgba(0, 0, 0, 0.6); /* Reduced opacity */
@@ -79,6 +79,7 @@
     opacity: 0;
     transition: opacity 0.5s ease;
     overflow-y: auto; /* Making the content scrollable */
+    border-radius: 5px;
 }
 
 .book-card:hover .book-cover .book-description {
